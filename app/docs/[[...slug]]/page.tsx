@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { DocsPage, DocsBody } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
 
+export const dynamicParams = false;
+
 export default async function Page({
   params,
 }: {
