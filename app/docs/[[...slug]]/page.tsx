@@ -21,6 +21,7 @@ export default async function Page({
     notFound();
   }
 
+  const path = `content/docs/${page.file.path}`;
   const MDX = page.data.exports.default;
 
   return (
