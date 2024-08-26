@@ -28,6 +28,12 @@ export default async function Page({
       toc={page.data.exports.toc}
       tableOfContent={{ style: "clerk" }}
       full={page.data.full}
+      editOnGithub={{
+        owner: "FyraLabs",
+        repo: "developer",
+        sha: "main",
+        path,
+      }}
     >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
