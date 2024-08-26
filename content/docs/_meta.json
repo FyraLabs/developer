@@ -1,0 +1,32 @@
+{
+  "index": {
+    "title": "Home",
+    "type": "page"
+  },
+  "terra": {
+    "title": "Terra",
+    "type": "page",
+    "display": "hidden"
+  },
+  "andaman": {
+    "title": "Andaman",
+    "type": "page",
+    "display": "hidden"
+  },
+  "helium": {
+    "title": "Helium",
+    "type": "page",
+    "display": "hidden"
+  },
+  "katsu": {
+    "title": "Katsu",
+    "type": "page",
+    "display": "hidden"
+  },
+
+  "submarine": {
+    "title": "Submarine",
+    "type": "page",
+    "display": "hidden"
+  }
+}

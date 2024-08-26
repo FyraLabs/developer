@@ -3,8 +3,6 @@ title: Mechanisms
 description: How Andaman Works
 ---
 
-import { Callout } from "fumadocs-ui/components/callout";
-
 # Mechanisms
 
 Andaman is a meta-build system that calls upon other build systems to build packages.
@@ -24,7 +22,7 @@ All the scripts in Anda can either be a command that can be executed with `sh -c
 - RPM: Anda calls either `mock` or `rpmbuild` depending on the `--rpm_builder` option which defaults to `mock`.
 - Flatpak: The manifest is read using the `flatpak` crate and the application is built using `flatpak-builder`.
   <Callout type="info">
-    As of 0.1.17, the output is always located at `.flatpak-builder/build/`, as
+    As of 0.2.3, the output is always located at `.flatpak-builder/build/`, as
     opposed to `anda-build/` used by other package types.
   </Callout>
 - Docker/Podman: Anda calls `docker build` or `podman build`.
@@ -62,8 +60,7 @@ Different labels should be separated by commas, like so:
 
 Which will be parsed to:
 
-rhai
-```ts
+```json
 {
   "commit_sha": "abc1234",
   "environment": "gh_ci",
@@ -77,8 +74,7 @@ See [Terra autoupdate documentation](/terra/autoupdate) for supported functions 
 
 Anda has supports automatically updating packages via the `anda update` command. The command finds all the projects with the file `update.rhai` in the same directory or if the configuration file has the `update` property set to a value:
 
-rhai
-```ts
+```hcl
 project project_name {
   update = "path/to/update_script.rhai"
   labels {

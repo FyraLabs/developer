@@ -3,8 +3,6 @@ title: Automatic Updates
 description: "How automatic updates can be set up for your package."
 ---
 
-import { Callout } from "fumadocs-ui/components/callout";
-
 # Automatic Updates
 
 There have been a few evolutions regarding the ways we deal with automatic updates, with many different solutions being explored in Terra.
@@ -26,7 +24,19 @@ rpm.version(ver); // updates the version in the spec file using `ver`
 
 <Callout type="warning">you need SEMICOLONS! (`;`)</Callout>
 
-Updates are triggered every 30 minutes using the command `anda update -vv`. However, nightly packages are updated every 24 hours using
+Updates are triggered every 10 minutes using `anda update`.
+
+<Callout emoji="📔">
+  Actually, the [full command](https://github.com/terrapkg/packages/blob/4767e5b9560f2986accaeb8447fbb4ea742041cf/.github/workflows/update.yml#L27-L31)
+  for auto-updating normal packages is: (as of 2024-08-09)
+  ```sh
+  RUST_BACKTRACE=full GITHUB_TOKEN=... anda update -vv --excludes nightly=1 --excludes updbranch=1
+  ```
+</Callout>
+
+#### Nightly packages
+
+Nightly packages are updated every 24 hours using
 `anda update -vv --filters nightly=1`. Their `anda.hcl` files should look something like this:
 
 ```hcl
@@ -35,13 +45,38 @@ project pkg {
 		spec = "pkg.spec"
 	}
 	labels {
-		nightly = "1"
+		nightly = 1
 	}
 }
 ```
 
-The best way to get started is to just search for other Rhai scripts in Terra. They are usually enough to do most of the tasks.
-If not, continue reading below.
+#### Per-branch auto-update scripts
+
+Terra supports updating a package for specific branches instead of updating a package for all branches.
+This is achieved using `--filters updbranch=1 --labels branch=f40` (`f40` is replaced by the branch name).
+The update command is run every 30 minutes.
+
+The `anda.hcl` file should look like this:
+
+```hcl
+project pkg {
+  rpm {
+    spec = "pkg.spec"
+  }
+  labels {
+    updbranch = 1
+  }
+}
+```
+
+You can obtain the branch name during runtime in Rhai using `labels.branch` (string).
+
+<Callout type="error">
+  You MUST NOT use this feature if the script ends up bumping versions across all branches at the same time.
+  This feature should only be used under cases where the version is different for different branch but for the same package.
+
+  Consequently, under normal circumstances and without approval, you are NOT allowed to use GitHub/GitLab related functions.
+</Callout>
 
 #### Functions and Modules
 
@@ -190,6 +225,8 @@ const IS_WIN32 = false; // `cfg!(windows)` in rust
 const ANDAX_VER = "0.1.3"; // `env!("CARGO_PKG_VERSION")` in rust
 ```
 
+{/*
+
 ### HeadPAT
 
 [HeadPAT] is a work-in-progress package version tracker. It is (going to be) a self-hosted microservice.
@@ -212,6 +249,7 @@ lua
 
 Then HeadPAT will look for `pat.lua` in the same directory.
 However, it is uncertain if the above will be the actual format as HeadPAT is still under heavy (but slow) development.
+*/}
 
 ## Guidelines
 
@@ -221,12 +259,7 @@ However, it is uncertain if the above will be the actual format as HeadPAT is st
   This is because GitHub has an API rate-limit.
 </Callout>
 <Callout type="info">
-  Only update nightly packages when the list of filters contains `nightly`:
-  ```ts
-  if filters.contains("nightly") {
-    ...
-  }
-  ```
+  You might see scripts with `if filters.contains("nightly")`. This `if` statement is no longer needed.
 </Callout>
 <Callout type="warning">Avoid running code unrelated to updating/bumping packages.</Callout>
 

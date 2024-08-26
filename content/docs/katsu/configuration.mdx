@@ -48,7 +48,7 @@ scripts:
             #!/bin/bash
             echo "Hello World"
         id: hello-world
-        title: Hello World
+        name: Hello World
         - file: ./hello-world.sh
           id: hello-world-file
 ```
@@ -265,7 +265,7 @@ import:
 scripts:
   post:
     - id: grub-install
-      title: Install GRUB
+      name: Install GRUB
       file: modules/scripts/grub-install.sh
 
 disk:
